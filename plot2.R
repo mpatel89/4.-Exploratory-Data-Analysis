@@ -12,6 +12,6 @@ x <- read.table("household_power_consumption.txt", sep = ";", col.names=colNames
 x[[1]] <- as.Date(x[[1]], format="%d/%m/%Y")
 
 #Generate labeled histogram for Global Active Power frequency
-hist(x$Global_active_power, col = "red", xlab = "Global Active Power (kilowatts)", main = "Global Active Power")
-
-#Output figure to PNG file
+plot(x$Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)")
+  
+    # TODO: get x-axis labels to show days without changing data....
