@@ -1,4 +1,6 @@
 #plot1.R
+setwd("~/R/Coursera/4. Exploratory Data Analysis/4.-Exploratory-Data-Analysis")
+
 #set classes for columns; mainly for dates as characters
 colClasses = c("character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric")
 
