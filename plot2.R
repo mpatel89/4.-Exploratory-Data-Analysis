@@ -1,17 +1,28 @@
 #plot1.R
-setwd("~/R/Coursera/4. Exploratory Data Analysis/4.-Exploratory-Data-Analysis")
 
-#set classes for columns; mainly for dates as characters
-colClasses = c("character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric")
+#sets working directory
+setwd("~/R/Coursera/4. Exploratory Data Analysis")
 
-#read header and data with proper head names and select rows
+#looks for data file or downloads if file not found
+if(!file.exists("household_power_consumption.txt"))
+{
+  download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip", destfile = "data.zip")
+  unzip("data.zip")
+}
+
+#We want to select for Feb. 1st through Feb 2nd.The data starts on Dec. 16 of the previous year, so there are 46 days worth of reads to skip.
+#Also, to address the time of the start (6 hours, 36 minutes), which is 396 reads. 
+#That's 46 days * 24 hours * 60 minutes + 396 reads= 66636. This is how many we want to skip.
+#We want to go from 0:00:00 hour to 0:00:00 hour of Feb 3rd (bc the plots have Friday on them; we'll need that). That is 2881 reads for each minute.
+
+#read header and desired subset of data with proper head names
 colNamesVec <- as.character(read.table("household_power_consumption.txt", sep = ";", colClasses = "character", nrows = 1))
-x <- read.table("household_power_consumption.txt", sep = ";", col.names=colNamesVec, colClasses = colClasses, skip =66637, nrows = 2881)
+x <- read.table("household_power_consumption.txt", sep = ";", col.names=colNamesVec, skip =66637, nrows = 2881)
 
 #change Date and Times to respective formats.
-x[[1]] <- as.Date(x[[1]], format="%d/%m/%Y")
+x$DateTime <- as.POSIXct(paste(x$Date, x$Time), format = "%d/%m/%Y %H:%M:%S")  
 
 #Generate labeled histogram for Global Active Power frequency
-plot(x$Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)")
-  
-    # TODO: get x-axis labels to show days without changing data....
+png("plot2.png")
+plot(x$Global_active_power ~ x$DateTime, xlab = "", ylab = "Global Active Power (kilowatts)", type = "l")
+dev.off()
